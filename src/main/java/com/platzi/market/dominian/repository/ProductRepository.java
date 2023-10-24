@@ -14,6 +14,10 @@ public interface ProductRepository {
     List<Product>getAll();
     Optional<List<Product>>getByCategory(int categoryID);
     Optional<List<Product>>getScarseProducts(int quantity);//quantity --> es la cantidad Q menor a eso debe de retornar
-    Optional<Product>getProduct(int productId);
+    Optional<Product> getProduct(int productId);
+
+    //metodo guardar un producto
+    Product save(Product product);
+
     void delete(int productId);
 }

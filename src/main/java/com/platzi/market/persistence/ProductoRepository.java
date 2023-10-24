@@ -16,7 +16,7 @@ import java.util.Optional;
   ESTA clase es la q le pega a la DB(no directmnt)
   por eso le indico eso mediante @Repository; tamb se podría usar @Component
  */
-
+//la clase con el implements NO apunta directmnt a UNA tabla de la DB sino al DOMINIO
 @Repository
 public class ProductoRepository implements ProductRepository {
 
@@ -52,22 +52,20 @@ public class ProductoRepository implements ProductRepository {
 
     @Override
     public Optional<Product> getProduct(int productId) {
-        return Optional.empty();
-    }
-
-
-    //busco prod por id
-    public Optional<Producto> getProducto(int idProducto){
-        return productoCrudRepository.findById(idProducto);
+        return productoCrudRepository.findById(productId).map(prod -> mapper.toProduct(prod));
     }
 
     //metodo guardar un producto
-    public Producto save(Producto producto){
-        return productoCrudRepository.save(producto);
+    @Override
+    public Product save(Product product){
+        //debo realizar conversion inversa YA q save espearo un Product NO Producto
+        Producto producto = mapper.toProducto(product);
+        return mapper.toProduct(productoCrudRepository.save(producto));
     }
 
     //eliminar
-    public void delete(int idProducto){
-        productoCrudRepository.deleteById(idProducto);
+    @Override
+    public void delete(int productoId){
+        productoCrudRepository.deleteById(productoId);
     }
 }
